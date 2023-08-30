@@ -40,12 +40,17 @@ for x in range(tile_width):
         else:
             avg_color = [int(col // pre_avg_color[3])
                                    for col in pre_avg_color[:-1]]
-            if avg_color[0] < avg_color[1] > avg_color[2]:
+            if avg_color[0] < avg_color[1] > avg_color[2] and avg_color[1] > 128:
                 oct_map[x][y].type = "forest"
-            elif avg_color[0]+10 < avg_color[2] > avg_color[1]+10:
+            elif (avg_color[0]+10 < avg_color[2] or avg_color[1]+10 < avg_color[2]) and avg_color[2] > 200:
                 oct_map[x][y].type = "water"
-            else:
+            elif avg_color[0] > 200 and avg_color[1] > 200 and avg_color[2] > 200:
                 oct_map[x][y].type = "city"
+            else:
+                print("Unknown color: ", avg_color)
+                oct_map[x][y].type = "undefined"
+                oct_map[x][y].color = [50, 50, 50]
+
 
 json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
 
