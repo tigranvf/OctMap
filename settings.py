@@ -9,6 +9,7 @@ map_size = f"{map_width}x{map_height}"
 min_num_road = 3  # minimum number of pixels that contain road in one tile.
 
 tile = 8  # size of tile
+outline = False
 horiz, vert = sqrt(3) * tile, 3/2 * tile
 res = width, height = horiz*40, vert*30  # resolution of window
 tile_width, tile_height = int(width//horiz), int(height//vert)

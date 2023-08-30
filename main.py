@@ -40,7 +40,8 @@ def render(cell: Cell):
     # for vertex in vertexes:
     #     pygame.draw.circle(screen, (255, 255, 255), vertex, 1)
     pygame.draw.polygon(screen, cell.color, vertexes)
-    pygame.draw.polygon(screen, black, vertexes, 1)
+    if outline:
+        pygame.draw.polygon(screen, black, vertexes, 1)
 
 
 cells = [[Cell(x, y, oct_map[x][y].cell_color) for y in range(tile_height)] for x in range(tile_width)]
