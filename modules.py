@@ -1,5 +1,10 @@
+import pygame
 import math
 
+render_road_color = (240, 200, 0)
+render_forest_color = (100, 230, 100)
+render_water_color = (100, 100, 230)
+render_city_color = (230, 230, 230)
 
 class Vector:
     def __init__(self, x: int, y = None):
@@ -44,6 +49,32 @@ class Vector:
 
     def get_tuple(self):
         return self.x, self.y
+
+
+# oct cell
+class Cell:
+    def __init__(self, x, y, color):
+        self.pos = Vector(x, y)
+        self.color = color
+
+
+class Tile:
+    def __init__(self):
+        self.type = "undefined"  # undefined, city, road, forest, water
+        self.color = [0, 0, 0]
+
+    @property
+    def cell_color(self):
+        if self.type == "undefined":
+            return self.color
+        if self.type == "road":
+            return render_road_color
+        if self.type == "forest":
+            return render_forest_color
+        if self.type == "water":
+            return render_water_color
+        if self.type == "city":
+            return render_city_color
 
 
 def cos(deg):
