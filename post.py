@@ -64,16 +64,105 @@ def main(oct_map):
 
                 if tile1 and tile6:
                     if tile1.type == tile6.type == "road":
-                        broken = True
+                        temp = [True, True]
+
+                        if tile2:
+                            if tile2.type == "road":
+                                temp[0] = False
+                        if tile3:
+                            if tile3.type == "road":
+                                temp[0] = False
+
+                        if tile4:
+                            if tile4.type == "road":
+                                temp[1] = False
+                        if tile5:
+                            if tile5.type == "road":
+                                temp[1] = False
+                        if temp[0] or temp[1]:
+                            broken = True
                 if tile2 and tile5:
                     if tile2.type == tile5.type == "road":
-                        broken = True
+                        temp = [True, True]
+
+                        if tile1:
+                            if tile1.type == "road":
+                                temp[0] = False
+                        if tile4:
+                            if tile4.type == "road":
+                                temp[0] = False
+
+                        if tile3:
+                            if tile3.type == "road":
+                                temp[1] = False
+                        if tile6:
+                            if tile6.type == "road":
+                                temp[1] = False
+
+                        if temp[0] or temp[1]:
+                            broken = True
                 if tile3 and tile4:
                     if tile3.type == tile4.type == "road":
-                        broken = True
+                        temp = [True, True]
+
+                        if tile1:
+                            if tile1.type == "road":
+                                temp[0] = False
+                        if tile5:
+                            if tile5.type == "road":
+                                temp[0] = False
+
+                        if tile2:
+                            if tile2.type == "road":
+                                temp[1] = False
+                        if tile6:
+                            if tile6.type == "road":
+                                temp[1] = False
+
+                        if temp[0] or temp[1]:
+                            broken = True
 
                 if not broken:
-                    oct_map[x][y].type = "city"
+                    count = {"city": 0, "forest": 0, "water": 0}
+
+                    if tile1:
+                        try:
+                            count[tile1.type] += 1
+                        except KeyError:
+                            ...
+                    if tile2:
+                        try:
+                            count[tile2.type] += 1
+                        except KeyError:
+                            ...
+                    if tile3:
+                        try:
+                            count[tile3.type] += 1
+                        except KeyError:
+                            ...
+                    if tile4:
+                        try:
+                            count[tile4.type] += 1
+                        except KeyError:
+                            ...
+                    if tile5:
+                        try:
+                            count[tile5.type] += 1
+                        except KeyError:
+                            ...
+                    if tile6:
+                        try:
+                            count[tile6.type] += 1
+                        except KeyError:
+                            ...
+
+                    if count["forest"] < count["city"] > count["water"]:
+                        oct_map[x][y].type = "city"
+                    if count["city"] < count["forest"] > count["water"]:
+                        oct_map[x][y].type = "forest"
+                    if count["forest"] < count["water"] > count["city"]:
+                        oct_map[x][y].type = "water"
+
                 else:
                     oct_map[x][y].type = "road"
             else:
