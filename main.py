@@ -47,7 +47,7 @@ def render(cell: Cell):
 cells = [[Cell(x, y, oct_map[x][y].cell_color) for y in range(tile_height)] for x in range(tile_width)]
 
 print("Init was ended")
-
+rendered = False
 # main loop
 while True:
     # check if we want to close the window
@@ -56,16 +56,18 @@ while True:
             exit()
 
     # calculating delta time from last tick (can be used in future)
-    deltaTime = pc() - last_tick
-    last_tick = pc()
+    #deltaTime = pc() - last_tick
+    #last_tick = pc()
 
     # clear the screen
-    screen.fill(black)
+    #screen.fill(black)
 
     # render cells
-    for col in cells:
-        for cell in col:
-            render(cell)
+    if not rendered:
+        for col in cells:
+            for cell in col:
+                render(cell)
+        rendered = True
 
     # update the screen
     pygame.display.flip()

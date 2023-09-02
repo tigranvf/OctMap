@@ -6,16 +6,20 @@ map_zoom = 12  # zoom
 map_width, map_height = 480, 360  # size of parsing image
 map_size = f"{map_width}x{map_height}"
 
+post_processing = True
+
 min_num_road = 0  # minimum number of pixels that contain road in one tile.
+
+end_of_map_tile = "undefined"
 
 priority = {
     "city": 0,
-    "forest": 1,
-    "water": 2
+    "forest": 0.1,
+    "water": 0.2
 }
 
 tile = 8  # size of tile
-outline = False
+outline = True
 horiz, vert = sqrt(3) * tile, 3/2 * tile
 res = width, height = horiz*120, vert*90  # resolution of window
 tile_width, tile_height = int(width//horiz), int(height//vert)

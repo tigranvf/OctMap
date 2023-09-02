@@ -48,16 +48,14 @@ for x in range(tile_width):
             else:
                 oct_map[x][y].type = "city"
 
-oct_map = post.main(oct_map)
+if post_processing:
+    oct_map = post.main(oct_map)
 
 json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
 
 for x, col in enumerate(oct_map):
     for y, el in enumerate(col):
-        if el.type == "undefined":
-            json_oct_map[x][y] = el.color
-        else:
-            json_oct_map[x][y] = el.type
+        json_oct_map[x][y] = el.type
 
 print("Saving google maps")
 
