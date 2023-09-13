@@ -13,17 +13,23 @@ except FileNotFoundError:
 
 print("Loading google maps")
 
-with open("map.json", "r") as file:
-    json_oct_map = json.load(file)
 
-oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
+def load():
+    global oct_map
+    with open("map.json", "r") as file:
+        json_oct_map = json.load(file)
 
-for x, col in enumerate(json_oct_map):
-    for y, el in enumerate(col):
-        if type(el) == str:
-            oct_map[x][y].type = el
-        else:
-            oct_map[x][y].color = el
+    oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
+
+    for x, col in enumerate(json_oct_map):
+        for y, el in enumerate(col):
+            if type(el) == str:
+                oct_map[x][y].type = el
+            else:
+                oct_map[x][y].color = el
+
+
+load()
 
 print("Intializing screen")
 

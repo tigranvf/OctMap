@@ -1,3 +1,4 @@
+from copy import deepcopy
 from settings import *
 from PIL import Image
 from modules import *
@@ -9,7 +10,8 @@ print("Getting google maps")
 
 # parsing google map image
 with open(img_path, "wb") as file:
-    file.write(requests.get(f"https://maps.googleapis.com/maps/api/staticmap?key={api_key}&center={map_x},{map_y}&zoom={map_zoom}&format=png&maptype=roadmap&style=element:labels|visibility:off&style=feature:administrative.land_parcel|visibility:off&style=feature:administrative.neighborhood|visibility:off&size={map_size}").content)
+    file.write(requests.get(
+        f"https://maps.googleapis.com/maps/api/staticmap?key={api_key}&center={map_x},{map_y}&zoom={map_zoom}&format=png&maptype=roadmap&style=element:labels|visibility:off&style=feature:administrative.land_parcel|visibility:off&style=feature:administrative.neighborhood|visibility:off&size={map_size}").content)
 
 print("Loading google maps")
 
@@ -29,7 +31,7 @@ for x in range(tile_width):
         pre_avg_color = [0, 0, 0, 0]
         for px in range(tile_map_width):
             for py in range(tile_map_height):
-                pixel = img.getpixel((x*tile_map_width+px, y*tile_map_height+py))
+                pixel = img.getpixel((x * tile_map_width + px, y * tile_map_height + py))
                 for n, col in enumerate(pixel):
                     pre_avg_color[n] += col
                 pre_avg_color[3] += 1
@@ -40,24 +42,30 @@ for x in range(tile_width):
         # if no road in cell color will be from map
         else:
             avg_color = [int(col // pre_avg_color[3])
-                                   for col in pre_avg_color[:-1]]
+                         for col in pre_avg_color[:-1]]
             if avg_color[0] < avg_color[1] > avg_color[2]:
                 oct_map[x][y].type = "forest"
-            elif avg_color[0]+10 < avg_color[2] > avg_color[1]+10:
+            elif avg_color[0] + 10 < avg_color[2] > avg_color[1] + 10:
                 oct_map[x][y].type = "water"
             else:
                 oct_map[x][y].type = "city"
 
 if post_processing:
-    oct_map = post.main(oct_map)
+    for i in range(num_of_posts):
+        oct_map = post.main(oct_map)
 
-json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
 
-for x, col in enumerate(oct_map):
-    for y, el in enumerate(col):
-        json_oct_map[x][y] = el.type
+def save():
+    json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
 
-print("Saving google maps")
+    for x, col in enumerate(oct_map):
+        for y, el in enumerate(col):
+            json_oct_map[x][y] = el.type
 
-with open("map.json", "w") as file:
-    json.dump(json_oct_map, file)
+    print("Saving google maps")
+
+    with open("map.json", "w") as file:
+        json.dump(json_oct_map, file)
+
+
+save()

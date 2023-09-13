@@ -76,6 +76,11 @@ class Tile:
         if self.type == "city":
             return render_city_color
 
+    def __copy__(self):
+        t = Tile()
+        t.type = self.type
+        return t
+
 
 def cos(deg):
     return math.cos(deg/180*math.pi)

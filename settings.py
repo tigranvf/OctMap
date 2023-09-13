@@ -6,6 +6,14 @@ map_zoom = 12  # zoom
 map_width, map_height = 480, 360  # size of parsing image
 map_size = f"{map_width}x{map_height}"
 
+num_of_posts = 5
+types = [
+    "water",
+    "forest",
+    "city",
+    "road"
+]
+
 post_processing = True
 
 min_num_road = 0  # minimum number of pixels that contain road in one tile.

@@ -40,40 +40,24 @@ def get_neighborhoods(oct_map, x, y):
 
 
 def first_check(tiles):
-    stay = True
+    collisions = 0
 
     for i in range(6):
         if tiles[i].type == tiles[(i + 1) % 6].type == "road":
-            stay = False
+            collisions += 1
 
-    return stay
-
-
-def second_check(tiles, stay: bool, i) -> bool:
-    a, b = i, i + 3
-
-    if tiles[a].type == tiles[b].type == "road":
-        temp = [True, True]
-
-        if tiles[a - 1].type == "road":
-            temp[0] = False
-        if tiles[a + 1].type == "road":
-            temp[0] = False
-        if tiles[b - 1].type == "road":
-            temp[1] = False
-        if tiles[(b + 1) % 6].type == "road":
-            temp[1] = False
-
-        if temp[0] or temp[1]:
+    for i in range(3):
+        if tiles[i].type == tiles[i+3].type == "road":
             return True
 
-    return stay
+    if collisions > 0:
+        return False
+
+    return True
 
 
 def main(oct_map):
     print("Post processing...")
-
-    # new_oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
 
     for x, col in enumerate(oct_map):
         for y, el in enumerate(col):
@@ -81,9 +65,6 @@ def main(oct_map):
                 tiles = get_neighborhoods(oct_map, x, y)
 
                 stay = first_check(tiles)
-
-                for i in range(3):
-                    stay = second_check(tiles, stay, i)
 
                 if not stay:
                     count = {"city": 0, "forest": 0, "water": 0}
