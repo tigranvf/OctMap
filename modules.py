@@ -81,6 +81,9 @@ class Tile:
         t.type = self.type
         return t
 
+    def __eq__(self, other):
+        return self.type == other.type
+
 
 def cos(deg):
     return math.cos(deg/180*math.pi)

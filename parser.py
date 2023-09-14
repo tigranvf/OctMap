@@ -51,7 +51,11 @@ for x in range(tile_width):
                 oct_map[x][y].type = "city"
 
 if post_processing:
-    for i in range(num_of_posts):
+    old_oct_map = deepcopy(oct_map)
+    oct_map = post.main(oct_map)
+
+    while old_oct_map != oct_map:
+        old_oct_map = deepcopy(oct_map)
         oct_map = post.main(oct_map)
 
 
