@@ -7,7 +7,10 @@ import pygame
 import json
 
 try:
-    open("map.json", "r").close()
+    if save_mode == "json":
+        open("map.json", "r").close()
+    if save_mode == "modern":
+        open("map.bin", "r").close()
 except FileNotFoundError:
     import parser
 
@@ -15,18 +18,35 @@ print("Loading google maps")
 
 
 def load():
-    global oct_map
-    with open("map.json", "r") as file:
-        json_oct_map = json.load(file)
+    if save_mode == "json":
+        global oct_map
+        with open("map.json", "r") as file:
+            json_oct_map = json.load(file)
 
-    oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
+        oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
 
-    for x, col in enumerate(json_oct_map):
-        for y, el in enumerate(col):
-            if type(el) == str:
-                oct_map[x][y].type = el
-            else:
-                oct_map[x][y].color = el
+        for x, col in enumerate(json_oct_map):
+            for y, el in enumerate(col):
+                if type(el) == str:
+                    oct_map[x][y].type = el
+                else:
+                    oct_map[x][y].color = el
+    if save_mode == "modern":
+        oct_map = [[Tile() for y in range(tile_height)] for x in range(tile_width)]
+        row_oct_map = []
+
+        with open("map.bin", "rb") as file:
+            data = file.read()
+
+        for byte in data:
+            stack = []
+            for i in range(4):
+                stack.append(types[(byte >> (i * 2)) % 4])
+            row_oct_map += stack[::-1]
+
+        for y in range(tile_height):
+            for x in range(tile_width):
+                oct_map[x][y].type = row_oct_map[y*tile_width+x]
 
 
 load()
@@ -62,11 +82,11 @@ while True:
             exit()
 
     # calculating delta time from last tick (can be used in future)
-    #deltaTime = pc() - last_tick
-    #last_tick = pc()
+    # deltaTime = pc() - last_tick
+    # last_tick = pc()
 
     # clear the screen
-    #screen.fill(black)
+    # screen.fill(black)
 
     # render cells
     if not rendered:

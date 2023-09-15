@@ -60,16 +60,42 @@ if post_processing:
 
 
 def save():
-    json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
+    if save_mode == "json":
+        json_oct_map = [[None for y in range(tile_height)] for x in range(tile_width)]
 
-    for x, col in enumerate(oct_map):
-        for y, el in enumerate(col):
-            json_oct_map[x][y] = el.type
+        for x, col in enumerate(oct_map):
+            for y, el in enumerate(col):
+                json_oct_map[x][y] = el.type
 
-    print("Saving google maps")
+        print("Saving google maps")
 
-    with open("map.json", "w") as file:
-        json.dump(json_oct_map, file)
+        with open("map.json", "w") as file:
+            json.dump(json_oct_map, file)
+    if save_mode == "modern":
+        row_oct_map = []
+
+        for y in range(tile_height):
+            for x in range(tile_width):
+                row_oct_map.append(oct_map[x][y])
+
+        byted_oct_map = []
+
+        stack = []
+
+        for i in row_oct_map:
+            stack.append(types.index(i.type))
+
+            if len(stack) == 4:
+                a, b, c, d = stack
+                temp = hex((a << 6) + (b << 4) + (c << 2) + d)[2:]
+                byted_oct_map.append((2-len(temp))*"0" + temp)
+
+                stack = []
+
+        byted_oct_map = list(map(lambda a: bytes.fromhex(a), byted_oct_map))
+        with open("map.bin", "wb") as file:
+            file.write(bytes().join(byted_oct_map))
+
 
 
 save()

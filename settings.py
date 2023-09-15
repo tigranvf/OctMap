@@ -6,6 +6,8 @@ map_zoom = 12  # zoom
 map_width, map_height = 480, 360  # size of parsing image
 map_size = f"{map_width}x{map_height}"
 
+save_mode = "json"  # json or modern ( my variant )
+
 types = [
     "water",
     "forest",
